@@ -4,7 +4,7 @@ BASE="$HOME/RahmanCLI"
 
 echo ""
 echo "══════════════════════════════════"
-echo "        🚀 Rahman CLI v2.4"
+echo "        🚀 Rahman CLI v2.5"
 echo "══════════════════════════════════"
 echo ""
 
@@ -36,6 +36,12 @@ echo ""
 
 echo "PLUGIN"
 echo " plugin        Manage plugins"
+echo ""
+
+echo "MARKETPLACE"
+echo " marketplace   Manage templates and plugins"
+echo " marketplace list"
+echo " marketplace install <name>"
 echo ""
 
 echo "CONFIG"
@@ -75,14 +81,25 @@ echo ""
 echo "TEMPLATES"
 
 if [ -d "$BASE/templates" ]; then
+
+    COUNT=0
+
     for template in "$BASE/templates"/*
     do
         if [ -d "$template" ]; then
             echo " ✔ $(basename "$template")"
+            COUNT=$((COUNT+1))
         fi
     done
+
+    if [ "$COUNT" -eq 0 ]; then
+        echo " No templates found"
+    fi
+
 else
-    echo " No templates found"
+
+    echo " No templates folder"
+
 fi
 
 echo ""
@@ -90,21 +107,48 @@ echo ""
 echo "PLUGINS"
 
 if [ -d "$BASE/plugins" ]; then
-    FOUND=0
+
+    COUNT=0
 
     for plugin in "$BASE/plugins"/*.sh
     do
         if [ -f "$plugin" ]; then
             echo " ✔ $(basename "$plugin" .sh)"
-            FOUND=1
+            COUNT=$((COUNT+1))
         fi
     done
 
-    if [ "$FOUND" -eq 0 ]; then
+    if [ "$COUNT" -eq 0 ]; then
         echo " No plugins installed"
     fi
+
 else
+
     echo " No plugins folder"
+
+fi
+
+echo ""
+
+echo "MARKETPLACE ITEMS"
+
+if [ -f "$BASE/marketplace/index.conf" ]; then
+
+    echo " Available:"
+    echo ""
+
+    echo " Templates:"
+    grep -A10 "\[TEMPLATES\]" "$BASE/marketplace/index.conf" | tail -n +2
+
+    echo ""
+
+    echo " Plugins:"
+    grep -A10 "\[PLUGINS\]" "$BASE/marketplace/index.conf" | tail -n +2
+
+else
+
+    echo " Marketplace database not found"
+
 fi
 
 echo ""
@@ -117,6 +161,7 @@ echo "Examples:"
 echo " rahman new flask BlogAPI"
 echo " rahman build"
 echo " rahman run"
+echo " rahman marketplace list"
 echo " rahman check-update"
 echo "══════════════════════════════════"
 echo ""
