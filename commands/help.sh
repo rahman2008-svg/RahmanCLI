@@ -4,7 +4,7 @@ BASE="$HOME/RahmanCLI"
 
 echo ""
 echo "════════════════════════════════════════"
-echo "          🚀 Rahman CLI v2.9"
+echo "          🚀 Rahman CLI v3.0"
 echo "════════════════════════════════════════"
 echo ""
 
@@ -15,6 +15,7 @@ echo " about             About Rahman CLI"
 echo " doctor            Check system"
 echo " info              System information"
 echo " menu              Interactive menu"
+echo " completion        Enable command autocomplete"
 echo " check-update      Check CLI updates"
 echo " security          Security scanner"
 echo ""
@@ -27,6 +28,12 @@ echo " clean             Clean files"
 echo " detect            Detect project"
 echo " test              Run tests"
 echo " docs              Generate documentation"
+echo ""
+
+echo "WORKFLOW"
+echo " workflow          Manage workflows"
+echo " workflow list     List workflows"
+echo " workflow run      Run workflow"
 echo ""
 
 echo "PACKAGE"
@@ -79,6 +86,10 @@ echo " update            Update Rahman CLI"
 echo " check-update      Check new version"
 echo ""
 
+echo "SECURITY"
+echo " security          Scan Rahman CLI"
+echo ""
+
 echo "ALIAS"
 echo " i   → install"
 echo " n   → new"
@@ -95,8 +106,8 @@ echo ""
 echo "TEMPLATES"
 
 if [ -d "$BASE/templates" ]; then
-    for template in "$BASE/templates"/*; do
-        [ -d "$template" ] && echo " ✔ $(basename "$template")"
+    for item in "$BASE/templates"/*; do
+        [ -d "$item" ] && echo " ✔ $(basename "$item")"
     done
 fi
 
@@ -105,8 +116,8 @@ echo ""
 echo "PLUGINS"
 
 if [ -d "$BASE/plugins" ]; then
-    for plugin in "$BASE/plugins"/*.sh; do
-        [ -f "$plugin" ] && echo " ✔ $(basename "$plugin" .sh)"
+    for item in "$BASE/plugins"/*.sh; do
+        [ -f "$item" ] && echo " ✔ $(basename "$item" .sh)"
     done
 fi
 
@@ -115,8 +126,18 @@ echo ""
 echo "EXTENSIONS"
 
 if [ -d "$BASE/extensions" ]; then
-    for ext in "$BASE/extensions"/*; do
-        [ -d "$ext" ] && echo " ✔ $(basename "$ext")"
+    for item in "$BASE/extensions"/*; do
+        [ -d "$item" ] && echo " ✔ $(basename "$item")"
+    done
+fi
+
+echo ""
+
+echo "WORKFLOWS"
+
+if [ -d "$BASE/workflows" ]; then
+    for item in "$BASE/workflows"/*; do
+        [ -f "$item" ] && echo " ✔ $(basename "$item")"
     done
 fi
 
@@ -138,6 +159,7 @@ echo "Examples:"
 echo " rahman new flask BlogAPI"
 echo " rahman build"
 echo " rahman run"
+echo " rahman workflow run test"
 echo " rahman sdk create weather"
 echo " rahman marketplace search flask"
 echo " rahman security"
