@@ -3,64 +3,83 @@
 while true
 do
 
-echo "════════════════════════════"
-echo "       Rahman CLI Menu"
-echo "════════════════════════════"
+clear
+
+echo "════════════════════════════════"
+echo "        🚀 Rahman CLI v3.1"
+echo "════════════════════════════════"
+echo ""
 
 echo "1. Create Project"
 echo "2. Build Project"
 echo "3. Run Project"
-echo "4. Install Package"
-echo "5. Plugin Manager"
-echo "6. Configuration"
-echo "7. Doctor"
-echo "8. Backup"
-echo "9. Exit"
+echo "4. Detect Project"
+echo "5. Install Package"
+echo "6. Manage Plugins"
+echo "7. SDK Extensions"
+echo "8. Marketplace"
+echo "9. Doctor"
+echo "10. Security Scan"
+echo "11. Backup"
+echo "12. Configuration"
+echo "0. Exit"
 
 echo ""
-read -p "Select: " choice
+read -p "Select Option: " CHOICE
 
 
-case $choice in
+case $CHOICE in
 
 1)
-echo "Example:"
-echo "rahman new flask MyAPI"
-read -p "Command: " cmd
-eval "rahman $cmd"
+bash "$HOME/RahmanCLI/commands/new.sh"
 ;;
 
 2)
-rahman build
+bash "$HOME/RahmanCLI/commands/build.sh"
 ;;
 
 3)
-rahman run
+bash "$HOME/RahmanCLI/commands/run.sh"
 ;;
 
 4)
-read -p "Package: " pkg
-rahman install $pkg
+bash "$HOME/RahmanCLI/commands/detect.sh"
 ;;
 
 5)
-rahman plugin
+bash "$HOME/RahmanCLI/commands/install.sh"
 ;;
 
 6)
-rahman config
+bash "$HOME/RahmanCLI/commands/plugin.sh"
 ;;
 
 7)
-rahman doctor
+bash "$HOME/RahmanCLI/commands/sdk.sh"
 ;;
 
 8)
-rahman backup
+bash "$HOME/RahmanCLI/commands/marketplace.sh"
 ;;
 
 9)
-echo "Bye!"
+bash "$HOME/RahmanCLI/commands/doctor.sh"
+;;
+
+10)
+bash "$HOME/RahmanCLI/commands/security.sh"
+;;
+
+11)
+bash "$HOME/RahmanCLI/commands/backup.sh"
+;;
+
+12)
+bash "$HOME/RahmanCLI/commands/config.sh"
+;;
+
+0)
+echo "Goodbye!"
 exit 0
 ;;
 
@@ -69,5 +88,9 @@ echo "Invalid option"
 ;;
 
 esac
+
+
+echo ""
+read -p "Press Enter to continue..."
 
 done
