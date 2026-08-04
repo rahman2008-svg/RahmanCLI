@@ -1,74 +1,87 @@
 #!/data/data/com.termux/files/usr/bin/bash
 
+source "$HOME/RahmanCLI/lib/logger.sh"
+
+BASE="$HOME/RahmanCLI"
+TEMPLATES="$BASE/templates"
+
 TYPE="$1"
 NAME="$2"
 
+
 if [ -z "$TYPE" ] || [ -z "$NAME" ]; then
+
+    echo "================================"
+    echo "Rahman CLI - New Project"
+    echo "================================"
+
     echo "Usage:"
-    echo "  rahman new bash <name>"
-    echo "  rahman new python <name>"
-    echo "  rahman new node <name>"
-    echo "  rahman new android <name>"
+    echo "  rahman new <template> <project-name>"
+    echo ""
+
+    echo "Examples:"
+    echo "  rahman new bash hello"
+    echo "  rahman new python bot"
+    echo "  rahman new node website"
+    echo "  rahman new android MyApp"
+    echo "  rahman new flask BlogAPI"
+    echo "  rahman new fastapi Backend"
+    echo "  rahman new express Server"
+    echo "  rahman new react Portfolio"
+
+    echo "================================"
+
     exit 1
 fi
 
-case "$TYPE" in
-    bash)
-        mkdir -p "$NAME"
 
-        cat > "$NAME/main.sh" << 'EOF'
-#!/data/data/com.termux/files/usr/bin/bash
+TEMPLATE_DIR="$TEMPLATES/$TYPE"
 
-echo "Hello from Bash!"
-EOF
 
-        chmod +x "$NAME/main.sh"
-        echo "✔ Bash project created: $NAME"
-        ;;
+if [ ! -d "$TEMPLATE_DIR" ]; then
 
-    python)
-        mkdir -p "$NAME"
+    echo "Template '$TYPE' not found."
+    echo ""
 
-        cat > "$NAME/main.py" << 'EOF'
-print("Hello from Python!")
-EOF
+    echo "Available templates:"
 
-        echo "✔ Python project created: $NAME"
-        ;;
+    for dir in "$TEMPLATES"/*; do
+        [ -d "$dir" ] && basename "$dir"
+    done
 
-    node)
-        mkdir -p "$NAME"
+    exit 1
+fi
 
-        cat > "$NAME/package.json" << 'EOF'
-{
-  "name": "my-node-app",
-  "version": "1.0.0",
-  "scripts": {
-    "start": "node index.js"
-  }
-}
-EOF
 
-        cat > "$NAME/index.js" << 'EOF'
-console.log("Hello from Node.js!");
-EOF
 
-        echo "✔ Node project created: $NAME"
-        ;;
+if [ -e "$NAME" ]; then
 
-    android)
-        mkdir -p "$NAME/app/src/main"
+    echo "Project '$NAME' already exists."
 
-        cat > "$NAME/README.md" << 'EOF'
-Android Project
+    exit 1
+fi
 
-Created by Rahman CLI
-EOF
 
-        echo "✔ Android project structure created: $NAME"
-        ;;
 
-    *)
-        echo "Unknown project type: $TYPE"
-        ;;
-esac
+mkdir -p "$NAME"
+
+
+cp -r "$TEMPLATE_DIR"/. "$NAME"/
+
+
+
+echo "================================"
+echo "Rahman CLI"
+echo "================================"
+
+echo "✔ Project created successfully"
+echo "Template : $TYPE"
+echo "Project  : $NAME"
+echo "Location : $(pwd)/$NAME"
+
+echo "================================"
+
+
+
+# Save log
+log "new $TYPE $NAME"

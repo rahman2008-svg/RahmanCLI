@@ -2,24 +2,34 @@
 
 BASE="$HOME/RahmanCLI"
 
-MAIN="$1"
-SUB="$2"
+COMMAND="$1"
+shift
 
-if [ -z "$MAIN" ]; then
-    MAIN="help"
+# No command
+if [ -z "$COMMAND" ]; then
+    COMMAND="help"
 fi
 
-# সাধারণ কমান্ড
-if [ -f "$BASE/commands/$MAIN.sh" ]; then
-    bash "$BASE/commands/$MAIN.sh" "${@:2}"
+# Command directory
+COMMAND_SCRIPT="$BASE/commands/$COMMAND.sh"
+
+# Plugin directory
+PLUGIN_SCRIPT="$BASE/plugins/$COMMAND.sh"
+
+# Execute command
+if [ -f "$COMMAND_SCRIPT" ]; then
+    bash "$COMMAND_SCRIPT" "$@"
     exit 0
 fi
 
-# Subcommand
-if [ -n "$SUB" ] && [ -f "$BASE/commands/$MAIN/$SUB.sh" ]; then
-    bash "$BASE/commands/$MAIN/$SUB.sh" "${@:3}"
+# Execute plugin
+if [ -f "$PLUGIN_SCRIPT" ]; then
+    bash "$PLUGIN_SCRIPT" "$@"
     exit 0
 fi
 
-echo "Unknown command: $MAIN"
+echo "Unknown command: $COMMAND"
+echo ""
 echo "Run: rahman help"
+
+exit 1
