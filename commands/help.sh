@@ -3,9 +3,9 @@
 BASE="$HOME/RahmanCLI"
 
 echo ""
-echo "══════════════════════════════════"
-echo "        🚀 Rahman CLI v2.6"
-echo "══════════════════════════════════"
+echo "════════════════════════════════════════"
+echo "          🚀 Rahman CLI v2.7"
+echo "════════════════════════════════════════"
 echo ""
 
 echo "GENERAL"
@@ -16,6 +16,7 @@ echo " doctor            Check system"
 echo " info              System information"
 echo " menu              Interactive menu"
 echo " check-update      Check CLI updates"
+echo " security          Security scanner"
 echo ""
 
 echo "PROJECT"
@@ -55,15 +56,19 @@ echo " release           Version manager"
 echo ""
 
 echo "BACKUP"
-echo " backup            Create backup"
-echo " restore           Restore backup"
-echo " log               View logs"
-echo " log-clear         Clear logs"
+echo " backup             Create backup"
+echo " restore            Restore backup"
+echo " log                View logs"
+echo " log-clear          Clear logs"
 echo ""
 
 echo "UPDATE"
-echo " update            Update Rahman CLI"
-echo " check-update      Check new version"
+echo " update             Update Rahman CLI"
+echo " check-update       Check new version"
+echo ""
+
+echo "SECURITY"
+echo " security           Scan CLI security"
 echo ""
 
 echo "ALIAS"
@@ -83,26 +88,15 @@ echo "TEMPLATES"
 
 if [ -d "$BASE/templates" ]; then
 
-COUNT=0
+for template in "$BASE/templates"/*; do
 
-for template in "$BASE/templates"/*
-do
     if [ -d "$template" ]; then
         echo " ✔ $(basename "$template")"
-        COUNT=$((COUNT+1))
     fi
+
 done
 
-if [ "$COUNT" -eq 0 ]; then
-    echo " No templates found"
 fi
-
-else
-
-echo " No templates folder"
-
-fi
-
 
 echo ""
 
@@ -110,23 +104,13 @@ echo "PLUGINS"
 
 if [ -d "$BASE/plugins" ]; then
 
-COUNT=0
+for plugin in "$BASE/plugins"/*.sh; do
 
-for plugin in "$BASE/plugins"/*.sh
-do
     if [ -f "$plugin" ]; then
         echo " ✔ $(basename "$plugin" .sh)"
-        COUNT=$((COUNT+1))
     fi
+
 done
-
-if [ "$COUNT" -eq 0 ]; then
-    echo " No plugins installed"
-fi
-
-else
-
-echo " No plugins folder"
 
 fi
 
@@ -134,43 +118,31 @@ fi
 echo ""
 
 echo "REMOTE MARKETPLACE"
+echo " Available Packages:"
+echo ""
 
 if [ -f "$BASE/remote/market.conf" ]; then
 
-echo " Available Remote Packages:"
-echo ""
-
-echo " Templates:"
-grep -A10 "\[TEMPLATES\]" "$BASE/remote/market.conf" | tail -n +2
-
-
-echo ""
-
-echo " Plugins:"
-grep -A10 "\[PLUGINS\]" "$BASE/remote/market.conf" | tail -n +2
-
+cat "$BASE/remote/market.conf"
 
 else
 
-echo " Remote marketplace not configured"
+echo "No remote marketplace found."
 
 fi
 
 
 echo ""
 
-echo "══════════════════════════════════"
+echo "════════════════════════════════════════"
 echo "Usage:"
 echo " rahman <command>"
 echo ""
-
 echo "Examples:"
 echo " rahman new flask BlogAPI"
 echo " rahman build"
 echo " rahman run"
 echo " rahman marketplace search flask"
-echo " rahman marketplace install flask-api"
+echo " rahman security"
 echo " rahman check-update"
-
-echo "══════════════════════════════════"
-echo ""
+echo "════════════════════════════════════════"
