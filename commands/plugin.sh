@@ -2,22 +2,128 @@
 
 PLUGIN_DIR="$HOME/RahmanCLI/plugins"
 
+
+case "$1" in
+
+
+list)
+
 echo "================================"
-echo "Installed Plugins"
+echo "Rahman CLI Plugins"
 echo "================================"
 
-FOUND=0
+COUNT=0
 
-for file in "$PLUGIN_DIR"/*.sh
+for plugin in "$PLUGIN_DIR"/*.sh
 do
-    if [ -f "$file" ]; then
-        basename "$file" .sh
-        FOUND=1
+
+    if [ -f "$plugin" ]; then
+
+        basename "$plugin" .sh
+        COUNT=$((COUNT+1))
+
     fi
+
 done
 
-if [ "$FOUND" -eq 0 ]; then
-    echo "No plugins installed."
+
+echo "--------------------------------"
+echo "Total Plugins: $COUNT"
+echo "================================"
+
+;;
+
+
+create)
+
+
+NAME="$2"
+
+
+if [ -z "$NAME" ]; then
+
+echo "Usage:"
+echo "rahman plugin create <name>"
+
+exit 1
+
 fi
 
-echo "================================"
+
+
+FILE="$PLUGIN_DIR/$NAME.sh"
+
+
+
+if [ -f "$FILE" ]; then
+
+echo "Plugin already exists."
+
+exit 1
+
+fi
+
+
+
+cat > "$FILE" <<EOF
+#!/data/data/com.termux/files/usr/bin/bash
+
+echo "Rahman Plugin: $NAME"
+echo "Plugin executed successfully."
+
+EOF
+
+
+
+chmod +x "$FILE"
+
+
+echo "✔ Plugin created: $NAME"
+
+
+;;
+
+
+
+remove)
+
+
+NAME="$2"
+
+
+if [ -z "$NAME" ]; then
+
+echo "Usage:"
+echo "rahman plugin remove <name>"
+
+exit 1
+
+fi
+
+
+
+rm -f "$PLUGIN_DIR/$NAME.sh"
+
+
+echo "✔ Plugin removed: $NAME"
+
+
+;;
+
+
+*)
+
+
+echo "Rahman CLI Plugin Manager"
+
+echo ""
+
+echo "Usage:"
+echo " rahman plugin list"
+echo " rahman plugin create <name>"
+echo " rahman plugin remove <name>"
+
+
+;;
+
+esac
