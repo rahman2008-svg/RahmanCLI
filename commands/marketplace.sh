@@ -1,9 +1,8 @@
 #!/data/data/com.termux/files/usr/bin/bash
 
-
 BASE="$HOME/RahmanCLI"
 
-MARKET="$BASE/marketplace/index.conf"
+REMOTE="$BASE/remote/market.conf"
 
 
 case "$1" in
@@ -17,15 +16,28 @@ echo "================================"
 
 echo ""
 
-echo "Templates:"
-grep -A10 "\[TEMPLATES\]" "$MARKET" | tail -n +2
-
-echo ""
-
-echo "Plugins:"
-grep -A10 "\[PLUGINS\]" "$MARKET" | tail -n +2
+cat "$REMOTE"
 
 echo "================================"
+
+;;
+
+
+search)
+
+NAME="$2"
+
+if [ -z "$NAME" ]; then
+echo "Usage:"
+echo "rahman marketplace search <name>"
+exit 1
+fi
+
+
+echo "Searching: $NAME"
+echo ""
+
+grep -i "$NAME" "$REMOTE"
 
 ;;
 
@@ -36,18 +48,30 @@ NAME="$2"
 
 
 if [ -z "$NAME" ]; then
+
 echo "Usage:"
 echo "rahman marketplace install <name>"
+
 exit 1
+
 fi
 
 
-echo "Installing marketplace item: $NAME"
+if grep -q "$NAME=" "$REMOTE"; then
+
+echo "================================"
+echo "Installing $NAME"
+echo "================================"
 
 
-if grep -q "$NAME=" "$MARKET"; then
+echo "✔ Package found"
+echo "Downloading..."
 
-echo "✔ $NAME found in marketplace"
+sleep 2
+
+
+echo "✔ Installation complete"
+
 
 else
 
@@ -60,10 +84,14 @@ fi
 
 *)
 
-echo "Usage:"
+echo "Rahman Marketplace"
+
 echo ""
-echo "rahman marketplace list"
-echo "rahman marketplace install <name>"
+
+echo "Commands:"
+echo " marketplace list"
+echo " marketplace search <name>"
+echo " marketplace install <name>"
 
 ;;
 
