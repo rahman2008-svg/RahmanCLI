@@ -1,57 +1,48 @@
 #!/data/data/com.termux/files/usr/bin/bash
 
-# ==========================================
-# Rahman CLI Main Loader
-# ==========================================
-
 BASE="$HOME/RahmanCLI"
 
-
-# Load Alias System
-
-if [ -f "$BASE/lib/alias.sh" ]; then
-    source "$BASE/lib/alias.sh"
-fi
-
-
-# Load Theme
-
-if [ -f "$BASE/lib/theme.sh" ]; then
-    source "$BASE/lib/theme.sh"
-    color
-fi
-
-
 COMMAND="$1"
+
 shift
 
-
-# Default Command
 
 if [ -z "$COMMAND" ]; then
     COMMAND="help"
 fi
 
 
-# Apply Alias
+# Load Theme
+if [ -f "$BASE/lib/theme.sh" ]; then
+    source "$BASE/lib/theme.sh"
+    
+    if command -v color >/dev/null 2>&1; then
+        color
+    fi
+fi
 
-if command -v load_alias >/dev/null 2>&1
-then
-    COMMAND=$(load_alias "$COMMAND")
+
+# Load Alias System
+if [ -f "$BASE/lib/alias.sh" ]; then
+    source "$BASE/lib/alias.sh"
+    
+    if command -v resolve_alias >/dev/null 2>&1; then
+        COMMAND=$(resolve_alias "$COMMAND")
+    fi
 fi
 
 
 
-# Command Loader
-
+# Search Commands
 COMMAND_FILE="$BASE/commands/$COMMAND.sh"
-
 
 if [ -f "$COMMAND_FILE" ]; then
 
     bash "$COMMAND_FILE" "$@"
 
-    reset_color
+    if command -v reset_color >/dev/null 2>&1; then
+        reset_color
+    fi
 
     exit 0
 
@@ -59,16 +50,16 @@ fi
 
 
 
-# Plugin Loader
-
+# Search Plugins
 PLUGIN_FILE="$BASE/plugins/$COMMAND.sh"
-
 
 if [ -f "$PLUGIN_FILE" ]; then
 
     bash "$PLUGIN_FILE" "$@"
 
-    reset_color
+    if command -v reset_color >/dev/null 2>&1; then
+        reset_color
+    fi
 
     exit 0
 
@@ -76,22 +67,39 @@ fi
 
 
 
-# Command Not Found
+# Search Extensions
+EXTENSION_FILE="$BASE/extensions/$COMMAND/command.sh"
+
+if [ -f "$EXTENSION_FILE" ]; then
+
+    bash "$EXTENSION_FILE" "$@"
+
+    if command -v reset_color >/dev/null 2>&1; then
+        reset_color
+    fi
+
+    exit 0
+
+fi
+
+
 
 echo "================================"
-echo "🚀 Rahman CLI"
+echo "        🚀 Rahman CLI"
 echo "================================"
 
 echo "Unknown command: $COMMAND"
 
 echo ""
 
-echo "Run:"
-echo "  rahman help"
+echo "Run: rahman help"
 
 echo "================================"
 
 
-reset_color
+
+if command -v reset_color >/dev/null 2>&1; then
+    reset_color
+fi
 
 exit 1
