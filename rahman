@@ -1,0 +1,25 @@
+#!/data/data/com.termux/files/usr/bin/bash
+
+BASE="$HOME/RahmanCLI"
+
+MAIN="$1"
+SUB="$2"
+
+if [ -z "$MAIN" ]; then
+    MAIN="help"
+fi
+
+# সাধারণ কমান্ড
+if [ -f "$BASE/commands/$MAIN.sh" ]; then
+    bash "$BASE/commands/$MAIN.sh" "${@:2}"
+    exit 0
+fi
+
+# Subcommand
+if [ -n "$SUB" ] && [ -f "$BASE/commands/$MAIN/$SUB.sh" ]; then
+    bash "$BASE/commands/$MAIN/$SUB.sh" "${@:3}"
+    exit 0
+fi
+
+echo "Unknown command: $MAIN"
+echo "Run: rahman help"
