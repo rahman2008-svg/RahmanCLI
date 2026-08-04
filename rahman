@@ -1,33 +1,48 @@
 #!/data/data/com.termux/files/usr/bin/bash
 
+# ==========================================
+# Rahman CLI Main Loader
+# ==========================================
 
 BASE="$HOME/RahmanCLI"
 
-COMMAND="$1"
 
-shift
+# Load Alias System
 
-
-if [ -z "$COMMAND" ]; then
-
-    COMMAND="help"
-
+if [ -f "$BASE/lib/alias.sh" ]; then
+    source "$BASE/lib/alias.sh"
 fi
-
 
 
 # Load Theme
 
 if [ -f "$BASE/lib/theme.sh" ]; then
-
     source "$BASE/lib/theme.sh"
     color
+fi
 
+
+COMMAND="$1"
+shift
+
+
+# Default Command
+
+if [ -z "$COMMAND" ]; then
+    COMMAND="help"
+fi
+
+
+# Apply Alias
+
+if command -v load_alias >/dev/null 2>&1
+then
+    COMMAND=$(load_alias "$COMMAND")
 fi
 
 
 
-# Search Commands
+# Command Loader
 
 COMMAND_FILE="$BASE/commands/$COMMAND.sh"
 
@@ -44,7 +59,7 @@ fi
 
 
 
-# Search Plugins
+# Plugin Loader
 
 PLUGIN_FILE="$BASE/plugins/$COMMAND.sh"
 
@@ -61,13 +76,22 @@ fi
 
 
 
+# Command Not Found
+
 echo "================================"
-echo "Rahman CLI"
+echo "🚀 Rahman CLI"
+echo "================================"
+
 echo "Unknown command: $COMMAND"
+
 echo ""
-echo "Run: rahman help"
+
+echo "Run:"
+echo "  rahman help"
+
 echo "================================"
 
 
 reset_color
+
 exit 1
