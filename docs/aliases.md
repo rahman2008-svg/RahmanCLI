@@ -1,0 +1,17 @@
+# Rahman CLI Aliases
+
+
+i=install
+ins=install
+
+n=new
+newp=new
+
+b=build
+r=run
+
+u=update
+
+t=test
+
+d=doctor
