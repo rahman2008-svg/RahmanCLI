@@ -1,35 +1,73 @@
 #!/data/data/com.termux/files/usr/bin/bash
 
+
 BASE="$HOME/RahmanCLI"
 
 COMMAND="$1"
+
 shift
 
-# No command
+
 if [ -z "$COMMAND" ]; then
+
     COMMAND="help"
+
 fi
 
-# Command directory
-COMMAND_SCRIPT="$BASE/commands/$COMMAND.sh"
 
-# Plugin directory
-PLUGIN_SCRIPT="$BASE/plugins/$COMMAND.sh"
 
-# Execute command
-if [ -f "$COMMAND_SCRIPT" ]; then
-    bash "$COMMAND_SCRIPT" "$@"
+# Load Theme
+
+if [ -f "$BASE/lib/theme.sh" ]; then
+
+    source "$BASE/lib/theme.sh"
+    color
+
+fi
+
+
+
+# Search Commands
+
+COMMAND_FILE="$BASE/commands/$COMMAND.sh"
+
+
+if [ -f "$COMMAND_FILE" ]; then
+
+    bash "$COMMAND_FILE" "$@"
+
+    reset_color
+
     exit 0
+
 fi
 
-# Execute plugin
-if [ -f "$PLUGIN_SCRIPT" ]; then
-    bash "$PLUGIN_SCRIPT" "$@"
+
+
+# Search Plugins
+
+PLUGIN_FILE="$BASE/plugins/$COMMAND.sh"
+
+
+if [ -f "$PLUGIN_FILE" ]; then
+
+    bash "$PLUGIN_FILE" "$@"
+
+    reset_color
+
     exit 0
+
 fi
 
+
+
+echo "================================"
+echo "Rahman CLI"
 echo "Unknown command: $COMMAND"
 echo ""
 echo "Run: rahman help"
+echo "================================"
 
+
+reset_color
 exit 1
