@@ -1,36 +1,45 @@
 #!/data/data/com.termux/files/usr/bin/bash
 
-TOOL="$1"
 
-if [ -z "$TOOL" ]; then
-    echo "Usage:"
-    echo "  rahman install git"
-    echo "  rahman install python"
-    echo "  rahman install node"
-    echo "  rahman install java"
-    exit 1
+PACKAGE_DB="$HOME/RahmanCLI/packages/packages.conf"
+
+
+NAME="$1"
+
+
+if [ -z "$NAME" ]; then
+
+echo "Usage:"
+echo "rahman install <package>"
+
+exit 1
+
 fi
 
-case "$TOOL" in
-    git)
-        pkg install -y git
-        ;;
-    python)
-        pkg install -y python
-        ;;
-    node)
-        pkg install -y nodejs
-        ;;
-    java)
-        pkg install -y openjdk-21
-        ;;
-    wget)
-        pkg install -y wget
-        ;;
-    curl)
-        pkg install -y curl
-        ;;
-    *)
-        echo "Unknown package: $TOOL"
-        ;;
-esac
+
+
+COMMAND=$(grep "^$NAME=" "$PACKAGE_DB" | cut -d '=' -f2-)
+
+
+
+if [ -z "$COMMAND" ]; then
+
+echo "Package not found in Rahman repository."
+
+exit 1
+
+fi
+
+
+
+echo "================================"
+echo "Rahman CLI Installer"
+echo "Installing: $NAME"
+echo "================================"
+
+
+eval "$COMMAND"
+
+
+
+echo "✔ Installation completed"
