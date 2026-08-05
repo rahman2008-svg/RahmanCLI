@@ -1,0 +1,10 @@
+{
+  "name": "BlogAPI2",
+  "type": "flask",
+  "version": "1.0.0",
+  "author": "Abdur Rahman",
+  "created": "2026-08-05",
+  "build": "python app.py",
+  "run": "python app.py",
+  "description": ""
+}
